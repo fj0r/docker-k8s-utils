@@ -10,7 +10,8 @@ ARG BUILDTAGS=""
 ARG skopeo_version=0.1.40
 ARG skopeo_url=https://github.com/containers/skopeo/archive/v${skopeo_version}.tar.gz
 ENV GOPATH=/
-RUN wget -O- ${skopeo_url} \
+RUN mkdir -p $GOPATH/src/github.com/containers/skopeo && \
+    wget -O- ${skopeo_url} \
         | tar zxf - --strip-components=1 \
           -C $GOPATH/src/github.com/containers/skopeo && \
     cd $GOPATH/src/github.com/containers/skopeo && \
