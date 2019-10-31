@@ -27,5 +27,5 @@ COPY --from=build /skopeo /skopeo
 COPY --from=build /etc/containers /etc/containers
 
 RUN apk add --no-cache ca-certificates
-
+WORKDIR /world
 ENTRYPOINT [ "/skopeo" ]
