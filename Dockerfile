@@ -17,7 +17,8 @@ RUN set -eux \
         | sudo apt-key add - \
   ; apt-get autoremove -y wget \
   ; apt-get update \
-  ; apt-get install -y --no-install-recommends skopeo \
+  ; apt-get install -y --no-install-recommends \
+        skopeo buildah podman \
   ; curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
         > /usr/bin/kubectl \
   ; chmod +x /usr/bin/kubectl \
