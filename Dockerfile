@@ -20,6 +20,7 @@ RUN set -eux \
   ; apt-get install -y --no-install-recommends skopeo \
   ; curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
         > /usr/bin/kubectl \
+  ; chmod +x /usr/bin/kubectl \
   ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
   ; echo "$TIMEZONE" > /etc/timezone \
   ; sed -i /etc/locale.gen \
@@ -28,5 +29,3 @@ RUN set -eux \
 	; locale-gen \
   ; sed -i 's/^.*\(%sudo.*\)ALL$/\1NOPASSWD:ALL/g' /etc/sudoers \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
-
-ENTRYPOINT [ "/usr/bin/skopeo" ]
