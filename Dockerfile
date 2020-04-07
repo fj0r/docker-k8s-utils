@@ -18,6 +18,8 @@ RUN set -eux \
   ; apt-get remove wget \
   ; apt-get update \
   ; apt-get install -y --no-install-recommends skopeo \
+  ; curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
+        > /usr/bin/kubectl \
   ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
   ; echo "$TIMEZONE" > /etc/timezone \
   ; sed -i /etc/locale.gen \
