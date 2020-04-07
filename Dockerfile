@@ -1,31 +1,30 @@
-FROM ubuntu:18.10 AS build
+FROM debian:buster-slim
 
-RUN apt-get update -y \
- && apt-get install -y \
-      wget \
-      golang git-core go-md2man \
-      libglib2.0-dev
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV TIMEZONE=Asia/Shanghai
 
-ARG BUILDTAGS=""
-ARG skopeo_version=0.1.40
-ARG skopeo_url=https://github.com/containers/skopeo/archive/v${skopeo_version}.tar.gz
-ENV GOPATH=/
-RUN mkdir -p $GOPATH/src/github.com/containers/skopeo && \
-    wget -O- ${skopeo_url} \
-        | tar zxf - --strip-components=1 \
-          -C $GOPATH/src/github.com/containers/skopeo && \
-    cd $GOPATH/src/github.com/containers/skopeo && \
-    make binary-local-static DISABLE_CGO=1 && \
-    mkdir -p /etc/containers && \
-    cp default-policy.json /etc/containers/policy.json && \
-    cp skopeo /skopeo && \
-    ./skopeo --help
+RUN set -eux \
+  ; apt-get update \
+  ; apt-get upgrade -y \
+  ; export DEBIAN_FRONTEND=noninteractive \
+  ; apt-get install -y --no-install-recommends \
+        locales tzdata ca-certificates \
+        wget curl gnupg \
+  ; echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_10/ /' \
+        > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list \
+  ; wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Debian_10/Release.key -O- \
+        | sudo apt-key add - \
+  ; apt-get remove wget \
+  ; apt-get update \
+  ; apt-get install -y --no-install-recommends skopeo \
+  ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
+  ; echo "$TIMEZONE" > /etc/timezone \
+  ; sed -i /etc/locale.gen \
+		-e 's/# \(en_US.UTF-8 UTF-8\)/\1/' \
+		-e 's/# \(zh_CN.UTF-8 UTF-8\)/\1/' \
+	; locale-gen \
+  ; sed -i 's/^.*\(%sudo.*\)ALL$/\1NOPASSWD:ALL/g' /etc/sudoers \
+  ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-FROM frolvlad/alpine-glibc
-
-COPY --from=build /skopeo /skopeo
-COPY --from=build /etc/containers /etc/containers
-
-RUN apk add --no-cache ca-certificates
-WORKDIR /world
-ENTRYPOINT [ "/skopeo" ]
+ENTRYPOINT [ "/usr/bin/skopeo" ]
