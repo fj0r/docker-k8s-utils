@@ -19,7 +19,8 @@ RUN set -eux \
   ; apt-get update \
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
-  ; curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
+  ; export k8s_version=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) \
+  ; curl -L https://storage.googleapis.com/kubernetes-release/release/${k8s_version}/bin/linux/amd64/kubectl \
         > /usr/bin/kubectl \
   ; chmod +x /usr/bin/kubectl \
   ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
