@@ -10,7 +10,7 @@ RUN set -eux \
   ; export DEBIAN_FRONTEND=noninteractive \
   ; apt-get install -y --no-install-recommends \
         locales tzdata ca-certificates \
-        wget curl gnupg \
+        wget curl gnupg sudo \
   ; echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_10/ /' \
         > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list \
   ; wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Debian_10/Release.key -O- \
