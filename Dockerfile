@@ -15,7 +15,7 @@ RUN set -eux \
         > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list \
   ; wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Debian_10/Release.key -O- \
         | sudo apt-key add - \
-  ; apt-get remove wget \
+  ; apt-get autoremove -y wget \
   ; apt-get update \
   ; apt-get install -y --no-install-recommends skopeo \
   ; curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
