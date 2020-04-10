@@ -15,7 +15,6 @@ RUN set -eux \
         > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list \
   ; wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Debian_10/Release.key -O- \
         | sudo apt-key add - \
-  ; apt-get autoremove -y wget \
   ; apt-get update \
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
