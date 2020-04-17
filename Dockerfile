@@ -4,6 +4,10 @@ ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 ENV TIMEZONE=Asia/Shanghai
 
+ARG K8S_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+ARG HELM_VERSION=3.1.2
+ARG ISTIO_VERSION=1.5.1
+
 RUN set -eux \
   ; apt-get update \
   ; apt-get upgrade -y \
@@ -18,10 +22,17 @@ RUN set -eux \
   ; apt-get update \
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
-  ; export k8s_version=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) \
-  ; curl -L https://storage.googleapis.com/kubernetes-release/release/${k8s_version}/bin/linux/amd64/kubectl \
+  \
+  ; curl -L https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/kubectl \
         > /usr/bin/kubectl \
   ; chmod +x /usr/bin/kubectl \
+  \
+  ; curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+        | tar zxvf - -C /usr/bin linux-amd64/helm --strip-components=1 \
+  \
+  ; curl -L https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux.tar.gz \
+        | tar zxvf - -C /usr/bin istio-${ISTIO_VERSION}/bin/istioctl --strip-components=2 \
+  \
   ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
   ; echo "$TIMEZONE" > /etc/timezone \
   ; sed -i /etc/locale.gen \
