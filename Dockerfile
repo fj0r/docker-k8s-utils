@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM ubuntu:focal
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
@@ -6,7 +6,7 @@ ENV TIMEZONE=Asia/Shanghai
 
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 ARG K8S_VERSION=1.18.2
-ARG HELM_VERSION=3.1.2
+ARG HELM_VERSION=3.2.0
 ARG ISTIO_VERSION=1.5.1
 
 RUN set -eux \
