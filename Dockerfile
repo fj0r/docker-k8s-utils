@@ -16,11 +16,10 @@ RUN set -eux \
   ; apt-get install -y --no-install-recommends \
         locales tzdata ca-certificates \
         wget curl gnupg sudo \
-  ; echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_10/ /' \
-        > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list \
-  ; wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Debian_10/Release.key -O- \
-        | sudo apt-key add - \
-  ; apt-get update \
+  ; . /etc/os-release \
+  ; sh -c "echo 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
+  ; curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
+  ; apt-get update -qq
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
   \
