@@ -30,7 +30,7 @@ RUN set -eux \
   ; curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
         | tar zxvf - -C /usr/bin linux-amd64/helm --strip-components=1 \
   \
-  ; curl -L https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux.tar.gz \
+  ; curl -L https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux-amd64.tar.gz \
         | tar zxvf - -C /usr/bin istio-${ISTIO_VERSION}/bin/istioctl --strip-components=2 \
   \
   ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
