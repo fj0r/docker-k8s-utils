@@ -5,7 +5,7 @@ ENV LC_ALL=C.UTF-8
 ENV TIMEZONE=Asia/Shanghai
 
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
-ARG K8S_VERSION=1.18.3
+ARG K8S_VERSION=1.18.4
 ARG HELM_VERSION=3.2.4
 ARG ISTIO_VERSION=1.6.3
 
