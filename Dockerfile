@@ -29,13 +29,13 @@ RUN set -eux \
   \
   ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
     | tar zxf - --strip-components=3 -C /usr/local/bin kubernetes/client/bin/kubectl \
-  ; chmod +x /usr/bin/kubectl \
+  ; chmod +x /usr/local/bin/kubectl \
   \
   ; curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
-        | tar zxvf - -C /usr/bin linux-amd64/helm --strip-components=1 \
+        | tar zxvf - -C /usr/local/bin linux-amd64/helm --strip-components=1 \
   \
   ; curl -L https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux-amd64.tar.gz \
-        | tar zxvf - -C /usr/bin istio-${ISTIO_VERSION}/bin/istioctl --strip-components=2 \
+        | tar zxvf - -C /usr/local/bin istio-${ISTIO_VERSION}/bin/istioctl --strip-components=2 \
   \
   ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
   ; echo "$TIMEZONE" > /etc/timezone \
