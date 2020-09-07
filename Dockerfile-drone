@@ -17,11 +17,6 @@ RUN set -eux \
         locales tzdata ca-certificates \
         wget curl gnupg sudo \
   ; . /etc/os-release \
-  ; sh -c "echo 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
-  ; curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add - \
-  ; apt-get update -qq \
-  ; apt-get install -y --no-install-recommends \
-        skopeo buildah podman \
   \
   ; curl -L https://dl.k8s.io/${kubectl_version}/kubernetes-client-linux-amd64.tar.gz \
     | tar zxf - --strip-components=3 -C /usr/local/bin kubernetes/client/bin/kubectl \
@@ -41,3 +36,7 @@ RUN set -eux \
 	; locale-gen \
   ; sed -i 's/^.*\(%sudo.*\)ALL$/\1NOPASSWD:ALL/g' /etc/sudoers \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+COPY drone/update.sh /bin/
+ENTRYPOINT ["/bin/bash"]
+CMD ["/bin/update.sh"]
