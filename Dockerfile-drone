@@ -8,6 +8,7 @@ ENV TIMEZONE=Asia/Shanghai
 ARG K8S_VERSION=1.19.0
 ARG HELM_VERSION=3.3.1
 ARG ISTIO_VERSION=1.7.0
+ENV yq_version=3.3.2
 
 RUN set -eux \
   ; apt-get update \
@@ -18,7 +19,7 @@ RUN set -eux \
         wget curl gnupg sudo \
   ; . /etc/os-release \
   \
-  ; wget -q -O /usr/local/bin/yq ${yq_url} \
+  ; wget -q -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${yq_version}/yq_linux_amd64 \
     ; chmod +x /usr/local/bin/yq \
   \
   ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \

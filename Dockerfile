@@ -24,7 +24,7 @@ RUN set -eux \
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
   \
-  ; wget -q -O /usr/local/bin/yq ${yq_url} \
+  ; wget -q -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${yq_version}/yq_linux_amd64 \
     ; chmod +x /usr/local/bin/yq \
   \
   ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
