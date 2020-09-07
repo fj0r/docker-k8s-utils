@@ -1,0 +1,5 @@
+FROM nnurphy/k8su:drone
+
+COPY drone/update.sh /bin/
+ENTRYPOINT ["/bin/bash"]
+CMD ["/bin/update.sh"]

@@ -18,6 +18,9 @@ RUN set -eux \
         wget curl gnupg sudo \
   ; . /etc/os-release \
   \
+  ; wget -q -O /usr/local/bin/yq ${yq_url} \
+    ; chmod +x /usr/local/bin/yq \
+  \
   ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
     | tar zxf - --strip-components=3 -C /usr/local/bin kubernetes/client/bin/kubectl \
   ; chmod +x /usr/bin/kubectl \
@@ -36,6 +39,9 @@ RUN set -eux \
 	; locale-gen \
   ; sed -i 's/^.*\(%sudo.*\)ALL$/\1NOPASSWD:ALL/g' /etc/sudoers \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+COPY drone/kube_config.yml /kube_config.yml
+ENV KUBECONFIG=/kube_config.yml
 
 COPY drone/update.sh /bin/
 ENTRYPOINT ["/bin/bash"]

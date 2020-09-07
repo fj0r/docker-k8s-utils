@@ -8,6 +8,7 @@ ENV TIMEZONE=Asia/Shanghai
 ARG K8S_VERSION=1.19.0
 ARG HELM_VERSION=3.3.1
 ARG ISTIO_VERSION=1.7.0
+ENV yq_version=3.3.2
 
 RUN set -eux \
   ; apt-get update \
@@ -22,6 +23,9 @@ RUN set -eux \
   ; apt-get update -qq \
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
+  \
+  ; wget -q -O /usr/local/bin/yq ${yq_url} \
+    ; chmod +x /usr/local/bin/yq \
   \
   ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
     | tar zxf - --strip-components=3 -C /usr/local/bin kubernetes/client/bin/kubectl \
