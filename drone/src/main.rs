@@ -1,6 +1,8 @@
 
 
 use std::env::{var,VarError};
+use std::path::PathBuf;
+use std::io::Result as IoResult;
 
 fn get_env(has_kubernetes: bool, name: &str) -> Result<String, VarError> {
     let prefix = "PLUGIN";
@@ -11,6 +13,10 @@ fn get_env(has_kubernetes: bool, name: &str) -> Result<String, VarError> {
         format!("{}_{}", prefix, n)
     };
     var(&name)
+}
+
+fn modify_config_file(path: impl Into<PathBuf>) -> String {
+    format!("{:?}", path.into())
 }
 
 fn main() {
@@ -29,6 +35,10 @@ fn main() {
             format!("{}://{}:{}", protocol, ip, port)
         }
     };
+
+    let home = var("HOME").unwrap();
+    let config_path = var("KUBECONFIG").unwrap_or(format!("{}/.kube/config", home));
+    println!("{}", modify_config_file(config_path)) ;
 
     get_env(true, "server").unwrap_or("".to_owned());
 
