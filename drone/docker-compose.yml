@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  drone:
+    #build: .
+    image: rs
+    ports:
+    - '9122:22'
+    working_dir: /app
+    volumes:
+    - .:/app
+    - ./id_ed25519.pub:/etc/authorized_keys/root
+    - vscode-server:/root/.vscode-server
+    - cargo-cache:/opt/cargo
+    - $HOME/.gitconfig:/root/.gitconfig
+    #- $HOME/.ssh:/root/.ssh
+    cap_add:
+    - SYS_PTRACE
+    command:
+    - sshd
+
+volumes:
+  vscode-server:
+    external: true
+  cargo-cache:
+    external: true
