@@ -23,7 +23,7 @@ RUN set -eux \
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
   \
-  ; curl -L https://dl.k8s.io/${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
+  ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
     | tar zxf - --strip-components=3 -C /usr/local/bin kubernetes/client/bin/kubectl \
   ; chmod +x /usr/bin/kubectl \
   \
