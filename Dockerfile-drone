@@ -1,3 +1,10 @@
+FROM nnurphy/rs as build
+
+WORKDIR /app
+COPY drone /app
+RUN set -eux \
+  ; cargo build --release
+
 FROM ubuntu:focal
 
 ENV LANG=C.UTF-8
@@ -44,6 +51,5 @@ RUN set -eux \
 COPY drone/kube_config.yml /kube_config.yml
 ENV KUBECONFIG=/kube_config.yml
 
-COPY drone/update.sh /bin/
-ENTRYPOINT ["/bin/bash"]
-CMD ["/bin/update.sh"]
+COPY --from=build /app/target/release/drone /usr/bin
+ENTRYPOINT ["/usr/bin/drone"]

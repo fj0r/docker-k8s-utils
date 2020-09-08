@@ -1,18 +1,19 @@
+---
 apiVersion: v1
 kind: Config
 users:
   - name: ci
     user:
-      token: <token>
+      token: "<token>"
 clusters:
   - cluster:
-      certificate-authority-data: <cad>
-      server: <srv>
+      certificate-authority-data: "<cert>"
+      server: 127.0.0.1
     name: target
 contexts:
   - context:
       cluster: target
-      namespace: <ns>
+      namespace: "<ns>"
       user: ci
     name: deployment
 current-context: deployment

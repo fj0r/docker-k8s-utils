@@ -1,46 +1,34 @@
 
 
-use std::env::{var,VarError};
-use std::path::PathBuf;
-use std::io::Result as IoResult;
+use std::env::{var};
+use std::fs;
+mod lib;
+use lib::config::KubeConfig;
+use lib::opt::Opt;
+use lib::run_cmd;
 
-fn get_env(has_kubernetes: bool, name: &str) -> Result<String, VarError> {
-    let prefix = "PLUGIN";
-    let n = name.to_uppercase();
-    let name = if has_kubernetes {
-        format!("{}_{}_{}", prefix, "KUBERNETES", n)
-    } else {
-        format!("{}_{}", prefix, n)
-    };
-    var(&name)
-}
-
-fn modify_config_file(path: impl Into<PathBuf>) -> String {
-    format!("{:?}", path.into())
-}
-
-fn main() {
-    let ns= get_env(false, "namespace").unwrap_or("default".to_owned());
-    let port = get_env(true, "port").unwrap_or("6443".to_owned());
-    let protocol = get_env(false, "protocol").unwrap_or("https".to_owned());
-    let host = get_env(false, "hostname");
-    let ip = get_env(true, "server").unwrap();
-    let server: String = match host {
-        Ok(h) => {
-            // write /etc/hosts
-            println!("write to file `/etc/hosts`: {} {}", ip, h);
-            format!("{}://{}:{}", protocol, h, port)
-        },
-        Err(_) => {
-            format!("{}://{}:{}", protocol, ip, port)
-        }
-    };
-
-    let home = var("HOME").unwrap();
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let home = var("HOME")?;
     let config_path = var("KUBECONFIG").unwrap_or(format!("{}/.kube/config", home));
-    println!("{}", modify_config_file(config_path)) ;
+    use structopt::StructOpt;
+    let opt = Opt::from_args();
+    let mut cfg: KubeConfig  = serde_yaml::from_str(&fs::read_to_string(&config_path)?)?;
 
-    get_env(true, "server").unwrap_or("".to_owned());
 
-    println!("{}\n{}\n{}\n{}\n{}", ns, port, protocol, ip, server);
+    cfg.clusters[0].cluster.server = opt.url(&opt.dry_run)?;
+    cfg.clusters[0].cluster.ca = opt.cert;
+    cfg.users[0].user.token = opt.token;
+    cfg.contexts[0].context.namespace = opt.namespace;
+
+
+    if opt.dry_run {
+        println!("{}", serde_yaml::to_string(&cfg)?);
+    } else {
+        let _ = fs::write(config_path, serde_yaml::to_string(&cfg)?);
+    }
+
+    if let Some(cmd) = opt.cmd {
+        run_cmd(&cmd);
+    }
+    Ok(())
 }
