@@ -5,10 +5,10 @@ ENV LC_ALL=C.UTF-8
 ENV TIMEZONE=Asia/Shanghai
 
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
-ARG K8S_VERSION=1.19.0
+ARG K8S_VERSION=1.19.1
 ARG HELM_VERSION=3.3.1
-ARG ISTIO_VERSION=1.7.0
-ENV yq_version=3.3.2
+ARG ISTIO_VERSION=1.7.1
+ENV yq_version=3.3.4
 
 RUN set -eux \
   ; apt-get update \
