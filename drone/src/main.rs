@@ -27,8 +27,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let _ = fs::write(config_path, serde_yaml::to_string(&cfg)?);
     }
 
-    if let Some(cmd) = opt.cmd {
-        run_cmd(&cmd);
+    match opt.cmd {
+        Some(cmd) => run_cmd(&cmd),
+        None => Ok(())
     }
-    Ok(())
 }
