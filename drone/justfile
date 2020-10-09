@@ -1,0 +1,2 @@
+test:
+    cargo run -- --cert 123 --server 456 --token 789 --dry-run --cmd "kubectl get node "
