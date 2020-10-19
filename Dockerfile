@@ -8,7 +8,7 @@ ENV TIMEZONE=Asia/Shanghai
 ARG K8S_VERSION=1.19.2
 ARG HELM_VERSION=3.3.4
 ARG ISTIO_VERSION=1.7.2
-ENV yq_version=3.4.0
+ENV yq_version=3.4.1
 
 RUN set -eux \
   ; apt-get update \
