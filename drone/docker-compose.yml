@@ -17,7 +17,8 @@ services:
     cap_add:
     - SYS_PTRACE
     command:
-    - sshd
+    - sleep
+    - infinity
 
 volumes:
   vscode-server:
