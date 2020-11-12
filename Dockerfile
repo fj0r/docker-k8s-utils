@@ -5,9 +5,9 @@ ENV LC_ALL=C.UTF-8
 ENV TIMEZONE=Asia/Shanghai
 
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
-ARG K8S_VERSION=1.19.4
-ARG HELM_VERSION=3.4.1
-ARG ISTIO_VERSION=1.7.3
+ENV K8S_VERSION=1.19.4
+ENV HELM_VERSION=3.4.1
+ENV ISTIO_VERSION=1.7.3
 ENV octosql_version=0.3.0
 ENV yq_version=3.4.1
 
@@ -28,7 +28,7 @@ RUN set -eux \
   ; wget -q -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${yq_version}/yq_linux_amd64 \
     ; chmod +x /usr/local/bin/yq \
   \
-  ; wget -q -O /usr/local/octosql https://github.com/cube2222/octosql/releases/download/v${octosql_version}/octosql-linux \
+  ; wget -q -O /usr/local/bin/octosql https://github.com/cube2222/octosql/releases/download/v${octosql_version}/octosql-linux \
     ; chmod +x /usr/local/bin/octosql \
   ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
     | tar zxf - --strip-components=3 -C /usr/local/bin kubernetes/client/bin/kubectl \
