@@ -7,7 +7,7 @@ ENV TIMEZONE=Asia/Shanghai
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 ENV K8S_VERSION=1.19.4
 ENV HELM_VERSION=3.4.1
-ENV ISTIO_VERSION=1.7.3
+ENV ISTIO_VERSION=1.8.0
 ENV octosql_version=0.3.0
 ENV yq_version=3.4.1
 
