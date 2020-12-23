@@ -25,7 +25,7 @@ RUN set -eux \
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
   \
-  ; wget -q -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${yq_version}/yq_linux_amd64 \
+  ; wget -q -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v${yq_version}/yq_linux_amd64 \
     ; chmod +x /usr/local/bin/yq \
   \
   ; wget -q -O /usr/local/bin/octosql https://github.com/cube2222/octosql/releases/download/v${octosql_version}/octosql-linux \
