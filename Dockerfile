@@ -9,7 +9,7 @@ ENV K8S_VERSION=1.20.1
 ENV HELM_VERSION=3.4.2
 ENV ISTIO_VERSION=1.8.1
 ENV octosql_version=0.3.0
-ENV yq_version=4.1.0
+ENV yq_version=4.2.0
 
 RUN set -eux \
   ; apt-get update \
