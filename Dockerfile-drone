@@ -24,13 +24,13 @@ RUN set -eux \
   ; export DEBIAN_FRONTEND=noninteractive \
   ; apt-get install -y --no-install-recommends \
         locales tzdata ca-certificates \
-        wget curl gnupg sudo \
+        curl gnupg sudo \
   ; . /etc/os-release \
   \
-  ; wget -q -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v${yq_version}/yq_linux_amd64 \
+  ; curl -sSLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v${yq_version}/yq_linux_amd64 \
     ; chmod +x /usr/local/bin/yq \
   \
-  ; wget -q -O /usr/local/bin/octosql https://github.com/cube2222/octosql/releases/download/v${octosql_version}/octosql-linux \
+  ; curl -sSLo /usr/local/bin/octosql https://github.com/cube2222/octosql/releases/download/v${octosql_version}/octosql-linux \
     ; chmod +x /usr/local/bin/octosql \
   ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
     | tar zxf - --strip-components=3 -C /usr/local/bin kubernetes/client/bin/kubectl \

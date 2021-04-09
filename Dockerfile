@@ -17,7 +17,7 @@ RUN set -eux \
   ; export DEBIAN_FRONTEND=noninteractive \
   ; apt-get install -y --no-install-recommends \
         locales tzdata ca-certificates \
-        wget curl gnupg sudo \
+        curl gnupg sudo \
   ; . /etc/os-release \
   ; sh -c "echo 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
   ; curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add - \
@@ -25,10 +25,10 @@ RUN set -eux \
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
   \
-  ; wget -q -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v${yq_version}/yq_linux_amd64 \
+  ; curl -sSLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v${yq_version}/yq_linux_amd64 \
     ; chmod +x /usr/local/bin/yq \
   \
-  ; wget -q -O /usr/local/bin/octosql https://github.com/cube2222/octosql/releases/download/v${octosql_version}/octosql-linux \
+  ; curl -sSLo /usr/local/bin/octosql https://github.com/cube2222/octosql/releases/download/v${octosql_version}/octosql-linux \
     ; chmod +x /usr/local/bin/octosql \
   ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
     | tar zxf - --strip-components=3 -C /usr/local/bin kubernetes/client/bin/kubectl \
