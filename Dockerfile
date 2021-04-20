@@ -1,15 +1,8 @@
-FROM ubuntu:focal
+FROM debian:testing-slim
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 ENV TIMEZONE=Asia/Shanghai
-
-# curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
-ENV K8S_VERSION=1.20.1
-ENV HELM_VERSION=3.4.2
-ENV ISTIO_VERSION=1.8.1
-ENV octosql_version=0.3.0
-ENV yq_version=4.2.1
 
 RUN set -eux \
   ; apt-get update \
@@ -17,26 +10,27 @@ RUN set -eux \
   ; export DEBIAN_FRONTEND=noninteractive \
   ; apt-get install -y --no-install-recommends \
         locales tzdata ca-certificates \
-        curl gnupg sudo \
-  ; . /etc/os-release \
-  ; sh -c "echo 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
-  ; curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add - \
+        curl gnupg sudo jq \
+  ; echo 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_Testing/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list \
+  ; curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_Testing/Release.key | sudo apt-key add - \
   ; apt-get update -qq \
   ; apt-get install -y --no-install-recommends \
         skopeo buildah podman \
   \
-  ; curl -sSLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v${yq_version}/yq_linux_amd64 \
+  ; yq_ver=$(curl -sSL -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/mikefarah/yq/releases | jq -r '.[0].tag_name' | cut -c 2-) \
+  ; curl -sSLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v${yq_ver}/yq_linux_amd64 \
     ; chmod +x /usr/local/bin/yq \
   \
-  ; curl -sSLo /usr/local/bin/octosql https://github.com/cube2222/octosql/releases/download/v${octosql_version}/octosql-linux \
-    ; chmod +x /usr/local/bin/octosql \
-  ; curl -L https://dl.k8s.io/v${K8S_VERSION}/kubernetes-client-linux-amd64.tar.gz \
+  ; k8s_ver=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt | cut -c 2-) \
+  ; curl -L https://dl.k8s.io/v${k8s_ver}/kubernetes-client-linux-amd64.tar.gz \
     | tar zxf - --strip-components=3 -C /usr/local/bin kubernetes/client/bin/kubectl \
   ; chmod +x /usr/local/bin/kubectl \
   \
-  ; curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+  ; helm_ver=$(curl -sSL -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/helm/helm/releases | jq -r '.[0].tag_name' | cut -c 2-) \
+  ; curl -L https://get.helm.sh/helm-v${helm_ver}-linux-amd64.tar.gz \
         | tar zxvf - -C /usr/local/bin linux-amd64/helm --strip-components=1 \
   \
+  ; istio_ver=$(curl -sSL -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/istio/istio/releases | jq -r '.[0].tag_name') \
   ; curl -L https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux-amd64.tar.gz \
         | tar zxvf - -C /usr/local/bin istio-${ISTIO_VERSION}/bin/istioctl --strip-components=2 \
   \
