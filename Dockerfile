@@ -31,8 +31,8 @@ RUN set -eux \
         | tar zxvf - -C /usr/local/bin linux-amd64/helm --strip-components=1 \
   \
   ; istio_ver=$(curl -sSL -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/istio/istio/releases | jq -r '.[0].tag_name') \
-  ; curl -L https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/istio-${ISTIO_VERSION}-linux-amd64.tar.gz \
-        | tar zxvf - -C /usr/local/bin istio-${ISTIO_VERSION}/bin/istioctl --strip-components=2 \
+  ; curl -L https://github.com/istio/istio/releases/download/${istio_ver}/istio-${istio_ver}-linux-amd64.tar.gz \
+        | tar zxvf - -C /usr/local/bin istio-${istio_ver}/bin/istioctl --strip-components=2 \
   \
   ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
   ; echo "$TIMEZONE" > /etc/timezone \
